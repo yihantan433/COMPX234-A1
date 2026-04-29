@@ -88,10 +88,13 @@ def handle_client(client_socket):
             # TASK 2: Build the response string with its size prepended (3 digits + space),
             # then send it. Hint: total size = len(response) + 4. Use sendall().
            # TASK2 正确实现
+            response = "OK (key,value) read"  # 假设这是字符串
             response_len = len(response)
-            nnn_format = f"{response_len:03d}"
-            final_response = (nnn_format + response).encode()
-            client_socket.sendall(final_response)
+            # 总长度 = 响应正文长度 + 3（NNN本身占3位）
+            total_len = len(response) + 3
+            final_response = f"{total_len:03d}{response}"
+            client_socket.sendall(final_response.encode())
+          
 
 
     except (socket.error, ValueError):
@@ -128,8 +131,6 @@ def handle_request(message):
             else:
                 increment_stat("error_count")
                 return f"ERR {key} does not exist"
-
-        elif op == "G":
             increment_stat("get_count")
 
 
